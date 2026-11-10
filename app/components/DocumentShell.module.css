@@ -1,0 +1,102 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.libraryLink {
+  color: var(--ink-soft);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.libraryLink:hover {
+  color: var(--brand-strong);
+  text-decoration: underline;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.type {
+  margin: 0 0 0.2rem;
+  color: var(--brand-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.readonlyBadge {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #f3d59a;
+  border-radius: 999px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: 0.73rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid #f3d59a;
+  border-radius: var(--radius-md);
+  background: var(--warning-soft);
+  color: #7a3d05;
+}
+
+.notice p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.noticeIcon {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    width: 100%;
+  }
+}

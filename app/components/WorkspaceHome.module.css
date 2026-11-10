@@ -1,0 +1,127 @@
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.kicker {
+  margin: 0 0 0.3rem;
+  color: var(--brand-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.15rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+}
+
+.panel {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.panelHeader {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.list li:last-child .item {
+  border-bottom: 0;
+}
+
+.item:hover {
+  background: var(--surface-muted);
+}
+
+.itemName {
+  font-weight: 650;
+}
+
+.itemMeta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.state {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.state h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.state p {
+  max-width: 34rem;
+  margin: 0 auto 1.1rem;
+  color: var(--muted);
+}
+
+.mark {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  place-items: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: 18px;
+  background: var(--surface-muted);
+  color: var(--brand);
+  font-size: 1.7rem;
+}
+
+@media (max-width: 720px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

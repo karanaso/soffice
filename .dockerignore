@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.local
+data
+.e2e
+dist
+coverage
+playwright-report
+test-results
+openspec
+AGENTS.md

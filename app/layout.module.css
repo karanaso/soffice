@@ -1,0 +1,102 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid rgb(214 222 235 / 70%);
+  background: rgb(238 242 248 / 86%);
+  backdrop-filter: blur(12px);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: min(100%, var(--shell-max));
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brandMark {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--ink);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.brandSub {
+  margin-top: 0.15rem;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.main {
+  flex: 1;
+  width: min(100%, var(--shell-max));
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.footer {
+  width: min(100%, var(--shell-max));
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .headerInner {
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .main {
+    padding-top: 1.25rem;
+  }
+}

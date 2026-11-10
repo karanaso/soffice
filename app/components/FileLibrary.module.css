@@ -1,0 +1,259 @@
+.library {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.3rem;
+  color: var(--brand-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 3.15rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+
+.panel {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-muted);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.count {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:hover {
+  background: #fbfcff;
+}
+
+.primary {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.badge {
+  display: grid;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.word {
+  border-color: #bfd0f6;
+  background: #e9f0ff;
+  color: #1d4ed8;
+}
+
+.excel {
+  border-color: #bfe8cf;
+  background: #e9f9ef;
+  color: #067647;
+}
+
+.powerpoint {
+  border-color: #f4c9b8;
+  background: #fff1e9;
+  color: #b54708;
+}
+
+.drawing {
+  border-color: #d7c8f5;
+  background: #f2ecff;
+  color: #6b3fc4;
+}
+
+.fileText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fileName {
+  overflow: hidden;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.81rem;
+}
+
+.rowActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.state,
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.state h3,
+.empty h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.state p,
+.empty p {
+  max-width: 34rem;
+  margin: 0 auto 1.1rem;
+  color: var(--muted);
+}
+
+.emptyMark {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  place-items: center;
+  border: 1px dashed var(--border-strong);
+  border-radius: 18px;
+  background: var(--surface-muted);
+  color: var(--brand);
+  font-size: 1.7rem;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: min(100%, 32rem);
+  margin: 1.25rem auto 0;
+}
+
+.skeleton span {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted),
+    #e8edf6,
+    var(--surface-muted)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+.skeleton span:nth-child(2) {
+  width: 84%;
+}
+
+.skeleton span:nth-child(3) {
+  width: 64%;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 0.9rem 1rem;
+  }
+
+  .primary {
+    flex-basis: 100%;
+  }
+
+  .rowActions {
+    padding-left: 3.35rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .rowActions {
+    padding-left: 0;
+    flex-wrap: wrap;
+  }
+}
