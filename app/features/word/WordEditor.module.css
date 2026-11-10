@@ -1,0 +1,150 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbarGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.toolbarSeparator {
+  width: 1px;
+  height: 1.5rem;
+  margin: 0 0.15rem;
+  background: var(--border);
+}
+
+.toolbarButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.1;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.toolbarButton:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-muted);
+}
+
+.toolbarButton:active {
+  background: var(--brand-soft);
+}
+
+.paperFrame {
+  overflow-x: auto;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, #f8fafc, #eef2f8);
+}
+
+.page {
+  width: min(100%, 780px);
+  min-height: 520px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 5vw, 3.5rem);
+  border: 1px solid #e3e8f0;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgb(24 35 58 / 8%);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.page:focus {
+  outline: 2px solid rgb(37 99 235 / 35%);
+  outline-offset: 2px;
+}
+
+.page p {
+  margin: 0 0 0.75rem;
+}
+
+.page h1,
+.page h2,
+.page h3 {
+  margin: 1.25rem 0 0.6rem;
+  line-height: 1.25;
+}
+
+.page h1 {
+  font-size: clamp(1.45rem, 4vw, 2rem);
+}
+
+.page h2 {
+  font-size: clamp(1.25rem, 3.4vw, 1.6rem);
+}
+
+.page h3 {
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+}
+
+.page ul,
+.page ol {
+  margin: 0 0 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.page li {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 720px) {
+  .toolbar {
+    gap: 0.25rem;
+    padding: 0.35rem;
+  }
+
+  .toolbarButton {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0.25rem 0.45rem;
+    font-size: 0.8rem;
+  }
+
+  .toolbarSeparator {
+    display: none;
+  }
+
+  .paperFrame {
+    padding: 0.5rem;
+  }
+
+  .page {
+    min-height: 420px;
+    padding: 1rem;
+  }
+}
