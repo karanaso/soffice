@@ -1,0 +1,181 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gridSize {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.formulaBar {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.75rem;
+  padding: 0.35rem 0.5rem;
+  border-right: 1px solid var(--border);
+  background: var(--surface-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.formulaInput {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  padding: 0.4rem 0.65rem;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.formulaInput:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+
+.gridScroller {
+  max-width: 100%;
+  max-height: min(68vh, 640px);
+  overflow: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.grid {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: 0.82rem;
+}
+
+.corner,
+.columnHeader,
+.rowHeader {
+  position: sticky;
+  z-index: 1;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.corner {
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 3rem;
+  min-width: 3rem;
+  height: 2rem;
+}
+
+.columnHeader {
+  top: 0;
+  z-index: 2;
+  width: 4.75rem;
+  min-width: 4.75rem;
+  height: 2rem;
+  text-align: center;
+}
+
+.rowHeader {
+  left: 0;
+  z-index: 1;
+  width: 3rem;
+  min-width: 3rem;
+  height: 2rem;
+  text-align: center;
+}
+
+.cell {
+  width: 4.75rem;
+  min-width: 4.75rem;
+  max-width: 4.75rem;
+  height: 2rem;
+  padding: 0;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: cell;
+}
+
+.cell:hover {
+  background: var(--surface-muted);
+}
+
+.activeCell {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  background: var(--brand-soft);
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.cellInput {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0 0.45rem;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.cellInput:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+
+.cellValue {
+  display: block;
+  padding: 0 0.45rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 2rem;
+}
+
+.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .gridSize {
+    display: none;
+  }
+}
