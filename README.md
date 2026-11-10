@@ -1,9 +1,8 @@
 # soffice
 
-A small, self-hostable office suite for schools. The first release provides a
-shared document dashboard, a persistent tabbed workspace, read-only shells for
-Word, Excel, PowerPoint, and Drawing, and storage on either SQLite or
-PostgreSQL.
+A small, self-hostable office suite for schools. It provides a shared document
+dashboard, a persistent tabbed workspace, first-draft editors for Word, Excel,
+PowerPoint, and Drawing, and storage on either SQLite or PostgreSQL.
 
 ## Requirements
 
@@ -85,6 +84,26 @@ to the correct workspace.
    limited to 120 characters, and unique regardless of letter case.
 4. Use **Delete** on a row or in an open document and confirm. Deleting the open
    document returns you to the Library.
+5. Edit the document in its workspace. Changes save automatically after a short
+   idle period; the header shows **Saved**, **Unsaved changes**, **Saving…**, or
+   **Save failed** with a retry action. Leaving the page flushes pending changes.
+
+## Editors
+
+- **Word** — page editing with headings, bold/italic/underline, bulleted and
+  numbered lists, undo/redo, and plain-text paste.
+- **Excel** — a 26×100 cell grid with keyboard navigation, a formula bar,
+  arithmetic formulas with cell references and `SUM`, recalculation, and
+  undo/redo.
+- **PowerPoint** — an ordered slide list with add/delete/reorder and a 16:9
+  canvas for draggable text boxes.
+- **Drawing** — freehand pen and eraser tools, colors, stroke widths,
+  undo/redo, and a confirmable clear action.
+
+Editor content is stored as validated JSON in the `document_contents` table and
+is capped at 1 MiB per document. Content is loaded and saved through
+`/api/documents/<id>/content`; edits use a revision check so two tabs cannot
+silently overwrite each other.
 
 ## Docker deployment
 
@@ -114,17 +133,27 @@ the app.
 
 ## Current scope
 
-This release is intentionally read-only. Every document shell explains that
-editing tools are not available yet and offers no way to edit or save document
-content. The follow-up changes are:
+This release ships first-draft editors with content persistence, not full
+desktop-suite parity. The current editors cover the core writing, calculation,
+slide, and drawing flows listed above. Deferred work includes richer formatting,
+multi-sheet workbooks, slide layouts and transitions, shape libraries,
+comments, printing/PDF export, and Microsoft Office import/export.
 
-- `add-word-editor` — rich-text editing and content persistence
-- `add-spreadsheet-editor` — cell grid, formulas, and content persistence
-- `add-slide-editor` — slide list, canvas, and content persistence
-- `add-drawing-editor` — freehand drawing tools and content persistence
+Accounts, sharing, and document import/export remain follow-up changes.
 
-Accounts, sharing, and Microsoft Office import/export are deferred to later
-changes.
+## Parallel editor agents
+
+Five OpenCode agents are available for editor and platform work:
+
+- `word-dev` — Word editor
+- `excel-dev` — Excel editor
+- `powerpoint-dev` — PowerPoint editor
+- `drawing-dev` — Drawing editor
+- `shared-dev` — shared shell, storage, API, migrations, dependencies, and integration
+
+Each agent has its own ownership boundary and can work in a dedicated worktree.
+See [`docs/parallel-agents.md`](docs/parallel-agents.md) for the ownership
+table, worktree workflow, and shared-change handoff.
 
 ## Testing
 

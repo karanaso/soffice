@@ -8,7 +8,7 @@ formula bar, and undo/redo controls.
 
 ```ts
 import { ExcelEditor } from "@/app/features/excel";
-import type { EditorProps } from "@/components/editor-contract";
+import type { EditorProps } from "@/app/components/editor-contract";
 ```
 
 `ExcelEditor` accepts the shared `EditorProps` contract:

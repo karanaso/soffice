@@ -70,7 +70,7 @@ async function createPostgresHarness(
   const clock = createClock();
   let client = createPostgresClient(connectionString);
   await client.script(
-    "DROP TABLE IF EXISTS documents CASCADE; DROP TABLE IF EXISTS schema_migrations CASCADE;",
+    "DROP TABLE IF EXISTS document_contents CASCADE; DROP TABLE IF EXISTS documents CASCADE; DROP TABLE IF EXISTS schema_migrations CASCADE;",
   );
   await runMigrations(client);
   let repo: DocumentRepository = new PostgresDocumentRepository(client, {

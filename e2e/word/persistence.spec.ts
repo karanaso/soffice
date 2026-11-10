@@ -77,7 +77,7 @@ test("persists typed and formatted Word content across a reload", async ({
   await expect(surface.locator("h1")).toHaveText("Lesson plan");
   await expect(surface.locator("ul li")).toHaveCount(2);
   await expect(surface.locator("ul li").nth(1)).toHaveText("Second item");
-  await expect(surface.locator("strong")).toContainText(
+  await expect(surface.locator("b, strong").first()).toHaveText(
     "Bring pencils and paper.",
   );
 
@@ -89,7 +89,7 @@ test("persists typed and formatted Word content across a reload", async ({
   await expect(restored.locator("ul li")).toHaveCount(2);
   await expect(restored.locator("ul li").first()).toHaveText("First item");
   await expect(restored.locator("ul li").nth(1)).toHaveText("Second item");
-  await expect(restored.locator("strong")).toContainText(
+  await expect(restored.locator("b, strong").first()).toHaveText(
     "Bring pencils and paper.",
   );
 });
@@ -115,12 +115,12 @@ test("undoes and redoes text and formatting in the Word page", async ({
   await page.keyboard.press("Control+A");
   await page.getByRole("button", { name: "Bold" }).click();
   await expect(surface).toContainText("D");
-  await expect(surface.locator("strong")).toHaveText("D");
+  await expect(surface.locator("b, strong")).toHaveText("D");
 
   await page.getByRole("button", { name: "Undo" }).click();
-  await expect(surface.locator("strong")).toHaveCount(0);
+  await expect(surface.locator("b, strong")).toHaveCount(0);
   await expect(surface).toContainText("D");
 
   await page.getByRole("button", { name: "Redo" }).click();
-  await expect(surface.locator("strong")).toHaveText("D");
+  await expect(surface.locator("b, strong")).toHaveText("D");
 });

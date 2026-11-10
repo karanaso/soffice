@@ -41,7 +41,7 @@ Rules:
 Each feature exports one client component and its props:
 
 ```ts
-import type { EditorProps } from "@/components/editor-contract";
+import type { EditorProps } from "@/app/components/editor-contract";
 
 export function WordEditor({ documentId, initialContent, onChange }: EditorProps) {
   // Render the editor and call onChange with the complete payload after each

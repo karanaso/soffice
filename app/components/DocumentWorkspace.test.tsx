@@ -38,7 +38,7 @@ beforeEach(() => {
   vi.spyOn(documentsApi, "getContent").mockImplementation(async (id) => ({
     documentId: id,
     revision: 0,
-    content: {},
+    content: { blocks: [] },
     updatedAt: null,
   }));
 });
@@ -87,7 +87,7 @@ describe("DocumentWorkspace", () => {
       "Saved",
     );
     expect(screen.queryByText(/read-only/i)).not.toBeInTheDocument();
-    expect(screen.getByTestId("surface-word")).toBeInTheDocument();
+    expect(screen.getByTestId("editor-word")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "← Library" })).toHaveAttribute(
       "href",
       "/",

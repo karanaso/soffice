@@ -61,6 +61,55 @@ function keepSelection(event: MouseEvent<HTMLButtonElement>): void {
   event.preventDefault();
 }
 
+/**
+ * Chrome can wrap a new list inside the paragraph it replaced (`<p><ul>…`).
+ * That invalid nesting makes Enter split the list unpredictably, so lift the
+ * list out to the page level.
+ */
+function normalizeLists(root: HTMLElement): void {
+  root.querySelectorAll("p > ul, p > ol").forEach((list) => {
+    const parent = list.parentElement;
+    if (!parent || parent === root) {
+      return;
+    }
+
+    const hasText = Array.from(parent.childNodes)
+      .filter((node) => node !== list)
+      .some((node) => (node.textContent ?? "").trim() !== "");
+
+    if (hasText) {
+      parent.after(list);
+    } else {
+      parent.replaceWith(list);
+    }
+  });
+}
+
+function placeCaretAtEndOfCurrentBlock(root: HTMLElement): void {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) {
+    return;
+  }
+
+  let node: Node | null = selection.anchorNode;
+  if (node && node.nodeType === Node.TEXT_NODE) {
+    node = node.parentNode;
+  }
+  const block =
+    node instanceof Element
+      ? node.closest("li, p, h1, h2, h3")
+      : null;
+  if (!block || !root.contains(block)) {
+    return;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(block);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 const BLOCK_STYLES = [
   {
     style: "p",
@@ -197,6 +246,16 @@ export function WordEditor({
     (command: string, value?: string) => {
       focusPage();
       const applied = runExecCommand(command, value);
+      if (
+        applied &&
+        (command === "insertUnorderedList" || command === "insertOrderedList")
+      ) {
+        const page = pageRef.current;
+        if (page) {
+          normalizeLists(page);
+          placeCaretAtEndOfCurrentBlock(page);
+        }
+      }
       emitChange();
       return applied;
     },

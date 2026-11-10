@@ -40,7 +40,7 @@ test.beforeEach(async ({ request }) => {
   await clearLibrary(request);
 });
 
-test("creates a document, shows the read-only shell, and restores it", async ({
+test("creates a document, shows the editor, and restores it", async ({
   page,
 }) => {
   await page.goto("/");
@@ -54,17 +54,25 @@ test("creates a document, shows the read-only shell, and restores it", async ({
 
   await expect(page).toHaveURL(/\/word\/[0-9a-f-]+$/);
   await expect(page.getByRole("heading", { name: "Lesson plan" })).toBeVisible();
-  await expect(page.getByRole("status")).toContainText(
-    "Editing tools for Word are not available in this release. This document is read-only.",
-  );
-  await expect(page.getByTestId("surface-word")).toBeVisible();
-  await expect(page.locator('[contenteditable="true"]')).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /save/i })).toHaveCount(0);
+  await expect(page.getByTestId("editor-word")).toBeVisible();
+  await expect(page.getByTestId("save-status")).toContainText("Saved");
+  await expect(page.getByText(/read-only/i)).toHaveCount(0);
+
+  const editor = page.locator('[contenteditable="true"]');
+  await expect(editor).toHaveCount(1);
+  await editor.click();
+  await page.keyboard.type("Lesson plan content");
+  await expect(page.getByTestId("save-status")).toContainText("Saved", {
+    timeout: 5000,
+  });
 
   const documentUrl = page.url();
   await page.reload();
   await expect(page).toHaveURL(documentUrl);
   await expect(page.getByRole("heading", { name: "Lesson plan" })).toBeVisible();
+  await expect(page.locator('[contenteditable="true"]')).toContainText(
+    "Lesson plan content",
+  );
 
   await page.getByRole("link", { name: "← Library" }).click();
   await expect(page).toHaveURL("/");
@@ -131,7 +139,7 @@ test("switches tabs, restores the active document, and corrects a mismatched add
 
   await page.goto(`/excel/${word.id}`);
   await expect(page).toHaveURL(`/word/${word.id}`);
-  await expect(page.getByTestId("surface-word")).toBeVisible();
+  await expect(page.getByTestId("editor-word")).toBeVisible();
 });
 
 test("cancels and confirms deletion, and shows not-found for the deleted address", async ({
@@ -184,7 +192,7 @@ test("deletes the open document from its shell", async ({ page, request }) => {
     page.getByRole("heading", { name: "Assembly slides" }),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: "Delete" }).click();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Delete “Assembly slides”?" }),
   ).toBeVisible();
@@ -227,9 +235,17 @@ test("stays usable and free of page overflow at 360px and 1280px", async ({
 
     for (const document of documents) {
       await page.goto(`/${document.type}/${document.id}`);
-      await expect(page.getByTestId(`surface-${document.type}`)).toBeVisible();
+      await expect(page.getByTestId(`editor-${document.type}`)).toBeVisible();
       await expectTabsReachable(page);
       await expectNoPageOverflow(page);
+
+      const primaryControl = {
+        word: page.getByRole("button", { name: "Bold" }),
+        excel: page.getByTestId("excel-grid"),
+        powerpoint: page.getByRole("button", { name: "Add slide" }),
+        drawing: page.getByRole("button", { name: "Pen", exact: true }),
+      }[document.type];
+      await expect(primaryControl).toBeVisible();
     }
   }
 });
