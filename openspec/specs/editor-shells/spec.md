@@ -22,18 +22,6 @@ Opening a document SHALL show a shell specific to its type: a page surface for W
 - **WHEN** the user activates the Library control from a shell
 - **THEN** the dashboard is shown and the document remains in the library
 
-### Requirement: Shells are explicitly read-only placeholders
-
-A document shell SHALL show a clear read-only notice stating that editing tools for that type are not available in this release. The shell SHALL NOT accept edits to document content and SHALL NOT persist document content.
-
-#### Scenario: View a document shell
-- **WHEN** a user opens any document
-- **THEN** the shell displays a read-only notice naming the document type and offers no control that saves document content
-
-#### Scenario: Attempt to modify content
-- **WHEN** a user interacts with the placeholder surface
-- **THEN** the document content does not change and no content is written to storage
-
 ### Requirement: Shell reports document loading state
 
 A shell SHALL show a loading state while the document is being read and SHALL show a recoverable error state if the document cannot be read. The error state SHALL offer retry and a way back to the Library.
@@ -45,3 +33,22 @@ A shell SHALL show a loading state while the document is being read and SHALL sh
 #### Scenario: Document read fails
 - **WHEN** reading the document from storage fails
 - **THEN** the shell shows an error with retry and Library actions and does not show a blank editable surface
+
+### Requirement: Shells host an editable editor
+
+A document shell SHALL host the editor for its document type in place of a placeholder and SHALL NOT describe the document as read-only. The shell SHALL show the document's save state as saved, unsaved, saving, or save failed while keeping the document name, type, and Library navigation available.
+
+#### Scenario: Open an editable document
+
+- **WHEN** a user opens a Word, Excel, PowerPoint, or Drawing document
+- **THEN** the shell shows the editor for that type with its editing controls and no read-only notice
+
+#### Scenario: Show save progress
+
+- **WHEN** an editor saves a change
+- **THEN** the shell shows a saving state and then a saved state
+
+#### Scenario: Show a failed save
+
+- **WHEN** an editor cannot save a change
+- **THEN** the shell shows a save-failed state with a retry action and keeps the user's edits in the editor
