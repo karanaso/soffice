@@ -7,6 +7,7 @@ import { createPostgresClient } from "../db/postgres";
 import { createSqliteClient } from "../db/sqlite";
 import { runMigrations } from "../db/migrate";
 import { NameConflictError, NotFoundError, ValidationError } from "./errors";
+import { ContentConflictError } from "../content/errors";
 import { PostgresDocumentRepository } from "./postgres-repository";
 import type { DocumentRepository } from "./repository";
 import { SqliteDocumentRepository } from "./sqlite-repository";
@@ -277,6 +278,163 @@ function defineRepositoryContract(
       expect((rejected[0] as PromiseRejectedResult).reason).toBeInstanceOf(
         NameConflictError,
       );
+    });
+
+    it("returns null when a document has no saved content", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "No content",
+        type: "word",
+      });
+
+      expect(await harness.repo.getContent(created.id)).toBeNull();
+    });
+
+    it("inserts content at revision 1 and reads it back", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "With content",
+        type: "word",
+      });
+
+      const saved = await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 0,
+        content: '{"blocks":[]}',
+      });
+
+      expect(saved).toMatchObject({
+        documentId: created.id,
+        revision: 1,
+        content: '{"blocks":[]}',
+      });
+      expect(await harness.repo.getContent(created.id)).toEqual(saved);
+    });
+
+    it("increments the revision on each save", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "Revisions",
+        type: "excel",
+      });
+
+      await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 0,
+        content: "{}",
+      });
+      const second = await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 1,
+        content: '{"cells":{}}',
+      });
+
+      expect(second.revision).toBe(2);
+      expect(second.content).toBe('{"cells":{}}');
+    });
+
+    it("rejects a stale revision without overwriting stored content", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "Conflict",
+        type: "drawing",
+      });
+      await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 0,
+        content: '{"strokes":[]}',
+      });
+      await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 1,
+        content: '{"strokes":[1]}',
+      });
+
+      await expect(
+        harness.repo.saveContent({
+          documentId: created.id,
+          revision: 1,
+          content: '{"strokes":[2]}',
+        }),
+      ).rejects.toBeInstanceOf(ContentConflictError);
+
+      expect((await harness.repo.getContent(created.id))?.content).toBe(
+        '{"strokes":[1]}',
+      );
+    });
+
+    it("allows exactly one of two concurrent first saves", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "First save race",
+        type: "powerpoint",
+      });
+
+      const results = await Promise.allSettled([
+        harness.repo.saveContent({
+          documentId: created.id,
+          revision: 0,
+          content: '{"slides":[]}',
+        }),
+        harness.repo.saveContent({
+          documentId: created.id,
+          revision: 0,
+          content: '{"slides":[1]}',
+        }),
+      ]);
+
+      expect(
+        results.filter((result) => result.status === "fulfilled"),
+      ).toHaveLength(1);
+      const rejected = results.find(
+        (result) => result.status === "rejected",
+      ) as PromiseRejectedResult;
+      expect(rejected.reason).toBeInstanceOf(ContentConflictError);
+    });
+
+    it("bumps the document's last-modified time when content is saved", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "Edited later",
+        type: "word",
+      });
+      harness.advance(1000);
+
+      await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 0,
+        content: '{"blocks":[]}',
+      });
+
+      const updated = await harness.repo.get(created.id);
+      expect(updated!.updatedAt > created.updatedAt).toBe(true);
+    });
+
+    it("deletes stored content with its document", async () => {
+      const created = await harness.repo.create({
+        id: randomUUID(),
+        name: "Delete content",
+        type: "drawing",
+      });
+      await harness.repo.saveContent({
+        documentId: created.id,
+        revision: 0,
+        content: "{}",
+      });
+
+      await harness.repo.delete(created.id);
+
+      expect(await harness.repo.getContent(created.id)).toBeNull();
+    });
+
+    it("reports NotFound when saving content for a missing document", async () => {
+      await expect(
+        harness.repo.saveContent({
+          documentId: randomUUID(),
+          revision: 0,
+          content: "{}",
+        }),
+      ).rejects.toBeInstanceOf(NotFoundError);
     });
 
     it("answers a health ping", async () => {

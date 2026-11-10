@@ -1,10 +1,17 @@
 import type { DatabaseDialect } from "../db/client";
+import type { StoredContent } from "../content/types";
 import type { Document, DocumentType } from "./types";
 
 export interface CreateDocumentInput {
   id: string;
   name: string;
   type: DocumentType;
+}
+
+export interface SaveContentInput {
+  documentId: string;
+  revision: number;
+  content: string;
 }
 
 export interface DocumentRepository {
@@ -15,6 +22,8 @@ export interface DocumentRepository {
   create(input: CreateDocumentInput): Promise<Document>;
   rename(id: string, name: string): Promise<Document>;
   delete(id: string): Promise<boolean>;
+  getContent(documentId: string): Promise<StoredContent | null>;
+  saveContent(input: SaveContentInput): Promise<StoredContent>;
   ping(): Promise<void>;
   close(): Promise<void>;
 }

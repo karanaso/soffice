@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import {
+  ContentConflictError,
+  ContentTooLargeError,
+  ContentValidationError,
+} from "../content/errors";
+import {
   NameConflictError,
   NotFoundError,
   ValidationError,
@@ -21,8 +26,20 @@ export function mapApiError(error: unknown): NextResponse {
     return apiError(400, "validation_error", error.message);
   }
 
+  if (error instanceof ContentValidationError) {
+    return apiError(400, "validation_error", error.message);
+  }
+
   if (error instanceof NameConflictError) {
     return apiError(409, "name_conflict", error.message);
+  }
+
+  if (error instanceof ContentConflictError) {
+    return apiError(409, "content_conflict", error.message);
+  }
+
+  if (error instanceof ContentTooLargeError) {
+    return apiError(413, "content_too_large", error.message);
   }
 
   if (error instanceof NotFoundError) {

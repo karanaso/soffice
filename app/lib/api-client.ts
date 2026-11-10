@@ -1,4 +1,5 @@
 import type { Document } from "@/lib/documents/types";
+import type { DocumentContent } from "@/lib/content/types";
 
 export class ApiClientError extends Error {
   readonly status: number;
@@ -84,5 +85,30 @@ export const documentsApi = {
     await request<void>(`/api/documents/${encodeURIComponent(id)}`, {
       method: "DELETE",
     });
+  },
+
+  async getContent(id: string): Promise<DocumentContent> {
+    return request<DocumentContent>(
+      `/api/documents/${encodeURIComponent(id)}/content`,
+      {
+        method: "GET",
+        cache: "no-store",
+      },
+    );
+  },
+
+  async saveContent(
+    id: string,
+    input: { revision: number; content: unknown },
+    options: { keepalive?: boolean } = {},
+  ): Promise<DocumentContent> {
+    return request<DocumentContent>(
+      `/api/documents/${encodeURIComponent(id)}/content`,
+      {
+        method: "PUT",
+        body: JSON.stringify(input),
+        keepalive: options.keepalive,
+      },
+    );
   },
 };
