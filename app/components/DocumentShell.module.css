@@ -68,6 +68,118 @@
   text-transform: uppercase;
 }
 
+.saveStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #b7e3c9;
+  border-radius: 999px;
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 0.73rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+}
+
+.saveStatusBusy {
+  border-color: #c7d7f5;
+  background: var(--brand-soft);
+  color: var(--brand-strong);
+}
+
+.saveStatusError,
+.saveStatusConflict {
+  border-color: #f1b4ad;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.statusAction {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.contentState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: center;
+}
+
+.contentState p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.contentError {
+  border-color: #f1b4ad;
+  background: var(--danger-soft);
+}
+
+.contentError p {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.contentError .errorDetail {
+  max-width: 46ch;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 400;
+}
+
+.contentActions,
+.conflictActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.conflictTitle {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+
+.conflictText {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.conflictActions {
+  justify-content: flex-end;
+}
+
 .notice {
   display: flex;
   align-items: flex-start;

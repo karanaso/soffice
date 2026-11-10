@@ -35,11 +35,12 @@ describe("prepareStartup", () => {
       "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
     );
     expect(tables.map((table) => table.name)).toContain("documents");
+    expect(tables.map((table) => table.name)).toContain("document_contents");
 
     const applied = await database.query<{ version: string }>(
       "SELECT version FROM schema_migrations",
     );
-    expect(applied).toEqual([{ version: "0001" }]);
+    expect(applied).toEqual([{ version: "0001" }, { version: "0002" }]);
   });
 
   it("aborts startup when a migration fails", async () => {

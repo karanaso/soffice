@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Document } from "@/lib/documents/types";
-import { ApiClientError } from "../lib/api-client";
+import { ApiClientError, documentsApi } from "../lib/api-client";
 import { DocumentWorkspace } from "./DocumentWorkspace";
 
 const navigation = vi.hoisted(() => ({
@@ -35,6 +35,16 @@ beforeEach(() => {
   navigation.push.mockReset();
   navigation.replace.mockReset();
   window.sessionStorage.clear();
+  vi.spyOn(documentsApi, "getContent").mockImplementation(async (id) => ({
+    documentId: id,
+    revision: 0,
+    content: {},
+    updatedAt: null,
+  }));
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function renderWorkspace(overrides: {
@@ -68,14 +78,15 @@ describe("DocumentWorkspace", () => {
     );
   });
 
-  it("renders the shell with the read-only notice and correct surface", async () => {
+  it("renders the editable shell with saved status and correct surface", async () => {
     renderWorkspace();
     expect(
       await screen.findByRole("heading", { name: "Lesson plan" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "Editing tools for Word are not available in this release. This document is read-only.",
+    expect(await screen.findByTestId("save-status")).toHaveTextContent(
+      "Saved",
     );
+    expect(screen.queryByText(/read-only/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("surface-word")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "← Library" })).toHaveAttribute(
       "href",
@@ -120,7 +131,7 @@ describe("DocumentWorkspace", () => {
     ).toHaveAttribute("href", "/");
   });
 
-  it("redirects to the correct workspace when the type does not match", async () => {
+  it("redirects to the correct workspace before content is requested", async () => {
     const replace = vi.fn();
     renderWorkspace({
       type: "word",
@@ -131,6 +142,7 @@ describe("DocumentWorkspace", () => {
     await vi.waitFor(() => {
       expect(replace).toHaveBeenCalledWith("/excel/excel-1");
     });
+    expect(documentsApi.getContent).not.toHaveBeenCalled();
   });
 
   it("updates the title and shell after a rename", async () => {

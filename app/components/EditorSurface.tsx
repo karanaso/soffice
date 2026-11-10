@@ -114,7 +114,14 @@ function DrawingSurface() {
   );
 }
 
-export function EditorSurface({ type }: { type: DocumentType }) {
+export interface EditorSurfaceProps {
+  type: DocumentType;
+  documentId?: string;
+  initialContent?: unknown;
+  onChange?: (content: unknown) => void;
+}
+
+export function EditorSurface({ type }: EditorSurfaceProps) {
   if (type === "word") {
     return <WordSurface />;
   }

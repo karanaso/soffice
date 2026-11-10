@@ -23,6 +23,7 @@ export interface UseDocumentContentOptions {
 export interface UseDocumentContentResult {
   content: unknown;
   revision: number;
+  contentVersion: number;
   status: SaveStatus;
   loading: boolean;
   loadError: string | null;
@@ -47,6 +48,7 @@ export function useDocumentContent({
 }: UseDocumentContentOptions): UseDocumentContentResult {
   const [content, setContent] = useState<unknown>(null);
   const [revision, setRevision] = useState(0);
+  const [contentVersion, setContentVersion] = useState(0);
   const [status, setStatus] = useState<SaveStatus>("saved");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -59,9 +61,13 @@ export function useDocumentContent({
   const savingRef = useRef(false);
   const conflictRef = useRef(false);
   const saveRef = useRef(save);
-  saveRef.current = save;
   const loadRef = useRef(load);
-  loadRef.current = load;
+  useEffect(() => {
+    saveRef.current = save;
+  }, [save]);
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
 
   const applyLoaded = useCallback((loaded: DocumentContent) => {
     contentRef.current = loaded.content;
@@ -71,6 +77,7 @@ export function useDocumentContent({
     conflictRef.current = false;
     setContent(loaded.content);
     setRevision(loaded.revision);
+    setContentVersion((version) => version + 1);
     setStatus("saved");
     setSaveError(null);
     setLoading(false);
@@ -79,8 +86,6 @@ export function useDocumentContent({
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setLoadError(null);
 
     loadRef.current(documentId)
       .then((loaded) => {
@@ -178,6 +183,8 @@ export function useDocumentContent({
   }, []);
 
   const retryLoad = useCallback(() => {
+    setLoading(true);
+    setLoadError(null);
     setLoadToken((token) => token + 1);
   }, []);
 
@@ -195,6 +202,8 @@ export function useDocumentContent({
   }, [performSave]);
 
   const reloadLatest = useCallback(async () => {
+    setLoading(true);
+    setLoadError(null);
     setLoadToken((token) => token + 1);
   }, []);
 
@@ -238,6 +247,7 @@ export function useDocumentContent({
   return {
     content,
     revision,
+    contentVersion,
     status,
     loading,
     loadError,

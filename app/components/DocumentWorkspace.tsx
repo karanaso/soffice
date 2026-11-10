@@ -178,6 +178,7 @@ export function DocumentWorkspace({
 
   return (
     <DocumentShell
+      key={doc.id}
       document={doc}
       onRename={handleRename}
       onDelete={handleDelete}
